@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 public class Path {
 
-	public static record No(ArrayList<Integer> adj, int V) {
-	}
-
 	public static void main(String[] args) {
 
 		System.out.println(validPath(6, new int[][] { { 0, 1 }, { 2, 4 }, { 4, 5 }, { 1, 5 }, { 0, 3 } }, 0, 2));
@@ -15,27 +12,27 @@ public class Path {
 	}
 
 	public static boolean validPath(int n, int[][] edges, int source, int destination) {
-		ArrayList<No> graph = new ArrayList<>();
+		ArrayList<Integer>[] graph = new ArrayList[n];
 
 		for (int i = 0; i < n; i++) {
-			graph.add(new No(new ArrayList<Integer>(), i));
+			graph[i] = new ArrayList<>();
 		}
 		for (int i = 0; i < edges.length; i++) {
-			graph.get(edges[i][0]).adj().add(edges[i][1]);
-			graph.get(edges[i][1]).adj().add(edges[i][0]);
+			graph[edges[i][0]].add(edges[i][1]);
+			graph[edges[i][1]].add(edges[i][0]);
 		}
 		boolean[] visited = new boolean[n];
-		return = dfs(visited, source, destination, false, graph);
+		return dfs(visited, source, destination, false, graph);
 	}
 
-	private static boolean dfs(boolean[] visited, int u, int destination, boolean res, ArrayList<No> graph) {
+	private static boolean dfs(boolean[] visited, int u, int destination, boolean res, ArrayList<Integer>[] graph) {
 		visited[u] = true;
-		if (graph.get(u).adj.contains(destination)) {
+		if (graph[u].contains(destination)) {
 			return true;
 		}
-		for (int i = 0; i < visited.length; i++) {
-			if (!visited[i] && graph.get(u).adj.contains(i)) {
-				res = dfs(visited, i, destination, res, graph);
+		for (int i = 0; i < graph[u].size(); i++) {
+			if (!visited[graph[u].get(i)]) {
+				res = dfs(visited, graph[u].get(i), destination, res, graph);
 			}
 		}
 		return res;
